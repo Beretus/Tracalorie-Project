@@ -3,22 +3,30 @@
 
 const ItemCtrl = (function(){
 
+    const Items = function(id, name, calories){
+        this.id = id,
+        this.name = name,
+        this.calories = calories
+    }
+
     const data = {
-        items: [
-            {id: 0, name: 'Steak', calories: 800},
-            {id: 1, name: 'Cookie', calories: 400},
-            {id: 2, name: 'Juice', calories: 300},
-        ]
+        items: []
     }
 
     return {
         ItemLog: function(){
-            console.log(data.items)
+            // console.log(data.items)
+
         },
 
         getItems: function(){
             return data.items
+        },
+
+        generateIds: function(){
+            
         }
+
     }
 
 })();
@@ -27,8 +35,7 @@ const ItemCtrl = (function(){
 
 const UICtrl = (function(){
 
-
-
+    
 
     return {
 
@@ -36,7 +43,7 @@ const UICtrl = (function(){
         let items = ItemCtrl.getItems();
         let html = '';
         items.forEach(item => {
-            console.log(item)
+            
             html += `<li class="collection-item" id="item-0">
             <strong>${item.name}: </strong> <em>${item.calories} Calories</em>
             <a href="#" class="secondary-content">
@@ -46,8 +53,14 @@ const UICtrl = (function(){
         });
         // Add to ul
         let list = document.querySelector('#item-list');
-        list.innerHTML += html;
-    }
+        list.innerHTML = html;
+
+        return html;
+
+    },
+
+    
+
 
 }
   
@@ -58,13 +71,40 @@ const UICtrl = (function(){
 
 const AppCtrl = (function(ItemCtrl, UICtrl){
 
+    const allEventListeners = function(){
+
+        document.querySelector('.add-btn').addEventListener('click', addItemsFromInput);
+
+    }
+
+    const addItemsFromInput = function(e){
+        let itemName = document.querySelector('#item-name').value;
+        let itemCalories = document.querySelector('#item-calories').value;
+        itemCalories = parseInt(itemCalories);
+        let arrItems = ItemCtrl.getItems();
+        
+        arrItems.push({id: 3, name: `${itemName}`, calories: itemCalories});
+            
+        // console.log(arrItems)
+        console.log(ItemCtrl.getItems())
+        UICtrl.addItemsToUI();
+
+        e.preventDefault();
+        
+    }
+
+    // Push input into  data
 
 
     return {
         init: function(){
             ItemCtrl.ItemLog();
 
-            UICtrl.addItemsToUI();
+            
+
+            allEventListeners();
+
+            
         }
     }
 
