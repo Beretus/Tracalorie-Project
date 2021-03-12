@@ -25,6 +25,12 @@ const ItemCtrl = (function(){
 
         generateIds: function(){
             
+            let id;
+            if(data.items.length > 0){
+                id = data.items.length - 1;
+            }
+            
+            return id;
         }
 
     }
@@ -82,12 +88,14 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
         let itemCalories = document.querySelector('#item-calories').value;
         itemCalories = parseInt(itemCalories);
         let arrItems = ItemCtrl.getItems();
-        
-        arrItems.push({id: 3, name: `${itemName}`, calories: itemCalories});
+        let id = ItemCtrl.generateIds();
+        console.log(id);
+        arrItems.push({id: id, name: `${itemName}`, calories: itemCalories});
             
         // console.log(arrItems)
         console.log(ItemCtrl.getItems())
         UICtrl.addItemsToUI();
+        
 
         e.preventDefault();
         
