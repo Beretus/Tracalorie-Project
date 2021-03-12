@@ -15,7 +15,7 @@ const ItemCtrl = (function(){
 
     return {
         ItemLog: function(){
-            // console.log(data.items)
+            console.log(data.items)
 
         },
 
@@ -65,6 +65,18 @@ const UICtrl = (function(){
 
     },
 
+    totalCaloriesCounter: function(){
+        let calCounter = document.querySelector('.total-calories');
+
+        let items = ItemCtrl.getItems();
+        let calories = 0;
+        items.forEach(item => {
+            calories += item.calories;
+        });
+
+        calCounter.innerHTML = calories;
+    }
+
     
 
 
@@ -89,13 +101,9 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
         itemCalories = parseInt(itemCalories);
         let arrItems = ItemCtrl.getItems();
         let id = ItemCtrl.generateIds();
-        console.log(id);
         arrItems.push({id: id, name: `${itemName}`, calories: itemCalories});
-            
-        // console.log(arrItems)
-        console.log(ItemCtrl.getItems())
         UICtrl.addItemsToUI();
-        
+        UICtrl.totalCaloriesCounter();
 
         e.preventDefault();
         
@@ -110,8 +118,10 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
             
 
+
             allEventListeners();
 
+            
             
         }
     }
