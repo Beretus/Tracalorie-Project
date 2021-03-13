@@ -16,7 +16,7 @@ const ItemCtrl = (function(){
 
     return {
         ItemLog: function(){
-            console.log(data.items)
+            console.log(data)
 
         },
 
@@ -32,12 +32,13 @@ const ItemCtrl = (function(){
                 if(item.id == id) {
                     
                     found = item;
+                    data.currentItem = item;
                 }
             });
-            
             return found;
             
         },
+
         
 
         generateIds: function(){
