@@ -60,6 +60,7 @@ const ItemCtrl = (function(){
 
 const UICtrl = (function(){
 
+
     
 
     return {
@@ -95,6 +96,26 @@ const UICtrl = (function(){
 
         calCounter.innerHTML = calories;
     },
+
+    addFoundToInput: function(found){
+
+        document.querySelector('#item-name').value = found.name;
+        document.querySelector('#item-calories').value = found.calories;
+
+    },
+
+    showEditStateOptions: function(){
+        document.querySelector('.update-btn').style.display = 'inline-block';
+        document.querySelector('.delete-btn').style.display = 'inline-block';
+        document.querySelector('.add-btn').style.display = 'none';
+    },
+
+
+    hideEditStateOptions: function(){
+        document.querySelector('.update-btn').style.display = 'none';
+        document.querySelector('.delete-btn').style.display = 'none';
+        document.querySelector('.add-btn').style.display = 'inline-block';
+    }
 
     
 
@@ -132,7 +153,7 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
             let found = ItemCtrl.itemEditState(id);
 
             UICtrl.addFoundToInput(found);
-
+            UICtrl.showEditStateOptions();
             console.log(found);
         }
         
@@ -163,15 +184,13 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
     return {
         init: function(){
+
             ItemCtrl.ItemLog();
-
-            
-
 
             allEventListeners();
 
-            
-            
+            UICtrl.hideEditStateOptions();
+
         }
     }
 
