@@ -10,7 +10,8 @@ const ItemCtrl = (function(){
     }
 
     const data = {
-        items: []
+        items: [],
+        currentItem: null
     }
 
     return {
@@ -23,11 +24,29 @@ const ItemCtrl = (function(){
             return data.items
         },
 
+        itemEditState: function(id){
+            let found = null;
+            
+            data.items.forEach(item => {
+                
+                if(item.id == id) {
+                    
+                    found = item;
+                }
+            });
+            
+            return found;
+            
+        },
+        
+
         generateIds: function(){
             
             let id;
             if(data.items.length > 0){
-                id = data.items.length - 1;
+                id = data.items.length + 1;
+            } else {
+                id = 1;
             }
             
             return id;
@@ -50,10 +69,10 @@ const UICtrl = (function(){
         let html = '';
         items.forEach(item => {
             
-            html += `<li class="collection-item" id="item-0">
+            html += `<li class="collection-item" id="item-${item.id}">
             <strong>${item.name}: </strong> <em>${item.calories} Calories</em>
             <a href="#" class="secondary-content">
-              <i class="fa fa-pencil"></i>
+              <i class="fa fa-pencil edit-item"></i>
             </a>
           </li>`;
         });
@@ -75,7 +94,9 @@ const UICtrl = (function(){
         });
 
         calCounter.innerHTML = calories;
-    }
+    },
+
+    
 
     
 
@@ -93,6 +114,32 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
         document.querySelector('.add-btn').addEventListener('click', addItemsFromInput);
 
+        document.querySelector('#item-list').addEventListener('click', addEditState);
+
+    }
+
+    const addEditState = function(e){
+        let id;
+        if(e.target.classList.contains('edit-item')){
+            let currItemId = e.target.parentElement.parentElement.id;
+
+            let currItemIdArray = currItemId.split('-');
+
+
+            id = currItemIdArray[1];
+
+            
+            let found = ItemCtrl.itemEditState(id);
+
+            UICtrl.addFoundToInput(found);
+
+            console.log(found);
+        }
+        
+        
+        
+
+       
     }
 
     const addItemsFromInput = function(e){
@@ -109,7 +156,9 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
         
     }
 
-    // Push input into  data
+
+    
+
 
 
     return {
