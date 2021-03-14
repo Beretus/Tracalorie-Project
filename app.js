@@ -211,7 +211,7 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
         ItemCtrl.checkSelectedItem(currentItem.id);
 
         UICtrl.deleteItemFromUI(currentItem.id);
-        
+        UICtrl.totalCaloriesCounter();
         e.preventDefault()
     }
 
