@@ -24,6 +24,10 @@ const ItemCtrl = (function(){
             return data.items
         },
 
+        getCurrentItem: function(){
+            return data.currentItem;
+        },
+
         itemEditState: function(id){
             let found = null;
             
@@ -35,8 +39,21 @@ const ItemCtrl = (function(){
                     data.currentItem = item;
                 }
             });
+            console.log(found);
             return found;
             
+        },
+
+        checkSelectedItem: function(id){
+            
+            ids = data.items.map(function(item){
+                return item.id;
+            });
+
+            const index = ids.indexOf(id);
+
+            data.items.splice(index, 1);
+
         },
 
         
@@ -105,6 +122,12 @@ const UICtrl = (function(){
 
     },
 
+    deleteItemFromUI: function(id){
+        const itemID = `#item-${id}`;
+        const item = document.querySelector(itemID);
+        item.remove();
+    },
+
     showEditStateOptions: function(){
         document.querySelector('.update-btn').style.display = 'inline-block';
         document.querySelector('.delete-btn').style.display = 'inline-block';
@@ -138,6 +161,8 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
         document.querySelector('#item-list').addEventListener('click', addEditState);
 
+        document.querySelector('.delete-btn').addEventListener('click', deleteSelectedItem);
+
     }
 
     const addEditState = function(e){
@@ -155,7 +180,8 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
             UICtrl.addFoundToInput(found);
             UICtrl.showEditStateOptions();
-            console.log(found);
+            // console.log(found);
+            return found;
         }
         
         
@@ -178,6 +204,17 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
         
     }
 
+    const deleteSelectedItem = function(e) {
+        
+        const currentItem = ItemCtrl.getCurrentItem();
+        
+        ItemCtrl.checkSelectedItem(currentItem.id);
+
+        UICtrl.deleteItemFromUI(currentItem.id);
+        
+        e.preventDefault()
+    }
+
 
     
 
@@ -185,12 +222,12 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
     return {
         init: function(){
+            UICtrl.hideEditStateOptions();
 
             ItemCtrl.ItemLog();
 
             allEventListeners();
 
-            UICtrl.hideEditStateOptions();
 
         }
     }
