@@ -16,7 +16,7 @@ const ItemCtrl = (function(){
 
     return {
         ItemLog: function(){
-            console.log(data)
+            console.log(data.items)
 
         },
 
@@ -44,6 +44,18 @@ const ItemCtrl = (function(){
             
         },
 
+        updateSelectedItem: function(id, name, calories){
+            console.log(id)
+            
+            calories = parseInt(calories);
+            // console.log(id, Ids)
+            if(data.items[id].id == id) {
+                data.items[id].name = name;
+                data.items[id].calories = calories;
+            }
+            
+        },
+
         checkSelectedItem: function(id){
             
             ids = data.items.map(function(item){
@@ -62,9 +74,9 @@ const ItemCtrl = (function(){
             
             let id;
             if(data.items.length > 0){
-                id = data.items.length + 1;
+                id = data.items[data.items.length - 1].id + 1;
             } else {
-                id = 1;
+                id = 0;
             }
             
             return id;
@@ -103,6 +115,8 @@ const UICtrl = (function(){
 
     },
 
+
+
     totalCaloriesCounter: function(){
         let calCounter = document.querySelector('.total-calories');
 
@@ -122,11 +136,15 @@ const UICtrl = (function(){
 
     },
 
+    
+
     deleteItemFromUI: function(id){
         const itemID = `#item-${id}`;
         const item = document.querySelector(itemID);
         item.remove();
     },
+
+   
 
     showEditStateOptions: function(){
         document.querySelector('.update-btn').style.display = 'inline-block';
@@ -162,6 +180,8 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
         document.querySelector('#item-list').addEventListener('click', addEditState);
 
         document.querySelector('.delete-btn').addEventListener('click', deleteSelectedItem);
+
+        document.querySelector('.update-btn').addEventListener('click', updateSelectedItem);
 
     }
 
@@ -215,6 +235,24 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
         e.preventDefault()
     }
 
+    const updateSelectedItem = function(e) {
+        
+        const currentItem = ItemCtrl.getCurrentItem()
+
+
+        let name = document.querySelector('#item-name').value;
+        let calories = document.querySelector('#item-calories').value;
+
+        ItemCtrl.updateSelectedItem(currentItem.id, name, calories);
+
+        UICtrl.addItemsToUI();
+
+        UICtrl.totalCaloriesCounter();
+
+
+        e.preventDefault()
+    }
+
 
     
 
@@ -224,7 +262,7 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
         init: function(){
             UICtrl.hideEditStateOptions();
 
-            ItemCtrl.ItemLog();
+            // ItemCtrl.ItemLog();
 
             allEventListeners();
 
