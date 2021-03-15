@@ -49,10 +49,13 @@ const ItemCtrl = (function(){
             
             calories = parseInt(calories);
             // console.log(id, Ids)
-            if(data.items[id].id == id) {
-                data.items[id].name = name;
-                data.items[id].calories = calories;
-            }
+            data.items.forEach(item => {
+                if(item.id == id) {
+                    item.name = name;
+                    item.calories = calories;
+                }
+            });
+            
             
         },
 
@@ -144,6 +147,11 @@ const UICtrl = (function(){
         item.remove();
     },
 
+    clearInput: function(){
+        document.querySelector('#item-calories').value = '';
+        document.querySelector('#item-name').value = '';
+    },
+
    
 
     showEditStateOptions: function(){
@@ -209,17 +217,23 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
        
     }
+    
 
     const addItemsFromInput = function(e){
+
+
         let itemName = document.querySelector('#item-name').value;
         let itemCalories = document.querySelector('#item-calories').value;
+        
+    if(itemName != '' && itemCalories != ''){
         itemCalories = parseInt(itemCalories);
         let arrItems = ItemCtrl.getItems();
         let id = ItemCtrl.generateIds();
         arrItems.push({id: id, name: `${itemName}`, calories: itemCalories});
         UICtrl.addItemsToUI();
         UICtrl.totalCaloriesCounter();
-
+        UICtrl.clearInput();
+    }
         e.preventDefault();
         
     }
@@ -232,6 +246,7 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
         UICtrl.deleteItemFromUI(currentItem.id);
         UICtrl.totalCaloriesCounter();
+        UICtrl.clearInput();
         e.preventDefault()
     }
 
@@ -249,6 +264,9 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
         UICtrl.totalCaloriesCounter();
 
+        UICtrl.clearInput();
+
+
 
         e.preventDefault()
     }
@@ -260,6 +278,7 @@ const AppCtrl = (function(ItemCtrl, UICtrl){
 
     return {
         init: function(){
+
             UICtrl.hideEditStateOptions();
 
             // ItemCtrl.ItemLog();
